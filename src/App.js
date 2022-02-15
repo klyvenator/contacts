@@ -1,24 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import { Container, Header, Line, ContactCard, ContactBox, Button } from './components.js';
 
 function App() {
+
+  const [contacts, setContacts] = React.useState([]);
+  React.useEffect(async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    const json = await response.json();
+    setContacts(json);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Header>Contacts</Header>
+      <Line/>
+      <ContactBox>
+        { contacts && contacts.map((item, key) => {
+          return <ContactCard name={item.name} email={item.email} phone={item.phone} website={item.website} key={key}/>
+        })}
+      </ContactBox>
+    </Container>
   );
 }
 
